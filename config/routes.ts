@@ -27,6 +27,7 @@ export default [
     name: 'welcome',
     icon: 'smile',
     component: './Welcome',
+    // hideInMenu:true,
   },
   {
     path: '/admin',
@@ -50,6 +51,37 @@ export default [
     icon: 'table',
     path: '/list',
     component: './TableList',
+  },
+  {
+    name: 'form',
+    icon: 'zhihu',
+    path: '/form',
+    component: './QueryClientInfo',
+  },
+  {
+    name: 'form.basic-form',
+    icon: 'solution',
+    path: '/ClientChartsInfo',
+    component: './ClientChartsInfo',
+  },
+  {
+    name: 'list.table-list',
+    icon: 'orderedList',
+    path: '/ClientInfo',
+    component: './ClientInfo',
+    menu: {
+      name: 'overview',
+      icon: 'testicon',
+      flatMenu: false,
+      hideInMenu: false,
+      hideChildrenInMenu: false,
+    },
+  },
+  {
+    name: 'form.basic-form',
+    icon: 'solution',
+    path: '/SporadicDyeing',
+    component: './SporadicDyeing',
   },
   {
     path: '/',

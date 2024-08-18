@@ -1,4 +1,4 @@
-import { addRule, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
+import { addRule, queryDyeList, queryDyeList2, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -21,7 +21,7 @@ import UpdateForm from './components/UpdateForm';
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.RuleListItem) => {
+const handleAdd = async (fields: API.DyeListItem) => {
   const hide = message.loading('正在添加');
   try {
     await addRule({ ...fields });
@@ -46,7 +46,7 @@ const handleUpdate = async (fields: FormValueType) => {
   try {
     await updateRule({
       name: fields.name,
-      desc: fields.desc,
+      desc: fields.name,
       key: fields.key,
     });
     hide();
@@ -66,7 +66,7 @@ const handleUpdate = async (fields: FormValueType) => {
  *
  * @param selectedRows
  */
-const handleRemove = async (selectedRows: API.RuleListItem[]) => {
+const handleRemove = async (selectedRows: API.DyeListItem[]) => {
   const hide = message.loading('正在删除');
   if (!selectedRows) return true;
   try {
@@ -98,8 +98,8 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.RuleListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.RuleListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<API.DyeListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<API.DyeListItem[]>([]);
 
   /**
    * @en-US International configuration
@@ -107,12 +107,12 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<API.RuleListItem>[] = [
+  const columns: ProColumns<API.DyeListItem>[] = [
     {
       title: (
         <FormattedMessage
-          id="pages.searchTable.updateForm.ruleName.nameLabel"
-          defaultMessage="Rule name"
+          id="pages.searchTable.dyeingName"
+          defaultMessage="染料、助剂名称"
         />
       ),
       dataIndex: 'name',
@@ -131,90 +131,71 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleDesc" defaultMessage="Description" />,
-      dataIndex: 'desc',
+      title: <FormattedMessage id="pages.searchTable.company" defaultMessage="公司名称" />,
+      dataIndex: 'company',
       valueType: 'textarea',
     },
     {
       title: (
         <FormattedMessage
-          id="pages.searchTable.titleCallNo"
-          defaultMessage="Number of service calls"
+          id="pages.searchTable.address"
+          defaultMessage="公司地址"
         />
       ),
-      dataIndex: 'callNo',
-      sorter: true,
-      hideInForm: true,
-      renderText: (val: string) =>
-        `${val}${intl.formatMessage({
-          id: 'pages.searchTable.tenThousand',
-          defaultMessage: ' 万 ',
-        })}`,
+      dataIndex: 'address',
+      valueType: 'textarea',
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleStatus" defaultMessage="Status" />,
+      title: (
+        <FormattedMessage
+          id="pages.searchTable.phone"
+          defaultMessage="联系方式"
+        />
+      ),
+      dataIndex: 'phone',
+      sorter: true,
+      hideInForm: true,
+    },
+    {
+      title: (
+        <FormattedMessage
+          id="pages.searchTable.totalAmount"
+          defaultMessage="当前总量"
+        />
+      ),
+      dataIndex: 'total_amount',
+      sorter: true,
+      search: false,
+    },
+    {
+      title: (
+        <FormattedMessage
+          id="pages.searchTable.lastAmount"
+          defaultMessage="上次总量"
+        />
+      ),
+      dataIndex: 'last_amount',
+      sorter: true,
+      search: false,
+    },
+    {
+      title: <FormattedMessage id="pages.searchTable.status" defaultMessage="状态" />,
       dataIndex: 'status',
       hideInForm: true,
+      // hideInTable: true,
       valueEnum: {
-        0: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.default"
-              defaultMessage="Shut down"
-            />
-          ),
-          status: 'Default',
-        },
         1: {
           text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.running" defaultMessage="Running" />
+            <FormattedMessage id="pages.searchTable.nameStatus.normal" defaultMessage="正常" />
           ),
           status: 'Processing',
         },
         2: {
           text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.online" defaultMessage="Online" />
+            <FormattedMessage id="pages.searchTable.nameStatus.cancel" defaultMessage="注销" />
           ),
           status: 'Success',
         },
-        3: {
-          text: (
-            <FormattedMessage
-              id="pages.searchTable.nameStatus.abnormal"
-              defaultMessage="Abnormal"
-            />
-          ),
-          status: 'Error',
-        },
-      },
-    },
-    {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.titleUpdatedAt"
-          defaultMessage="Last scheduled time"
-        />
-      ),
-      sorter: true,
-      dataIndex: 'updatedAt',
-      valueType: 'dateTime',
-      renderFormItem: (item, { defaultRender, ...rest }, form) => {
-        const status = form.getFieldValue('status');
-        if (`${status}` === '0') {
-          return false;
-        }
-        if (`${status}` === '3') {
-          return (
-            <Input
-              {...rest}
-              placeholder={intl.formatMessage({
-                id: 'pages.searchTable.exception',
-                defaultMessage: 'Please enter the reason for the exception!',
-              })}
-            />
-          );
-        }
-        return defaultRender(item);
       },
     },
     {
@@ -243,7 +224,7 @@ const TableList: React.FC = () => {
 
   return (
     <PageContainer>
-      <ProTable<API.RuleListItem, API.PageParams>
+      <ProTable<API.DyeListItem, API.DyeListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
@@ -264,7 +245,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={rule}
+        request={queryDyeList2}
         columns={columns}
         rowSelection={{
           onChange: (_, selectedRows) => {
@@ -285,7 +266,7 @@ const TableList: React.FC = () => {
                   id="pages.searchTable.totalServiceCalls"
                   defaultMessage="Total number of service calls"
                 />{' '}
-                {selectedRowsState.reduce((pre, item) => pre + item.callNo!, 0)}{' '}
+                {selectedRowsState.reduce((pre, item) => pre + item.key!, 0)}{' '}
                 <FormattedMessage id="pages.searchTable.tenThousand" defaultMessage="万" />
               </span>
             </div>
@@ -320,7 +301,7 @@ const TableList: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleModalOpen}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.RuleListItem);
+          const success = await handleAdd(value as API.DyeListItem);
           if (success) {
             handleModalOpen(false);
             if (actionRef.current) {
@@ -377,7 +358,7 @@ const TableList: React.FC = () => {
         closable={false}
       >
         {currentRow?.name && (
-          <ProDescriptions<API.RuleListItem>
+          <ProDescriptions<API.DyeListItem>
             column={2}
             title={currentRow?.name}
             request={async () => ({
@@ -386,7 +367,7 @@ const TableList: React.FC = () => {
             params={{
               id: currentRow?.name,
             }}
-            columns={columns as ProDescriptionsItemProps<API.RuleListItem>[]}
+            columns={columns as ProDescriptionsItemProps<API.DyeListItem>[]}
           />
         )}
       </Drawer>
