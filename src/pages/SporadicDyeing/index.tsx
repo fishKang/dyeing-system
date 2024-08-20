@@ -1,4 +1,4 @@
-import { addRule, queryDyeList, queryDyeList2, removeRule, rule, updateRule } from '@/services/ant-design-pro/api';
+import { addRule, queryDyeList2, removeRule, updateRule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -11,7 +11,7 @@ import {
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl } from '@umijs/max';
-import { Button, Drawer, Input, message } from 'antd';
+import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
@@ -109,12 +109,7 @@ const TableList: React.FC = () => {
 
   const columns: ProColumns<API.DyeListItem>[] = [
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.dyeingName"
-          defaultMessage="染料、助剂名称"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.dyeingName" defaultMessage="染料、助剂名称" />,
       dataIndex: 'name',
       // tip: 'The rule name is the unique key',
       render: (dom, entity) => {
@@ -136,44 +131,24 @@ const TableList: React.FC = () => {
       valueType: 'textarea',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.address"
-          defaultMessage="公司地址"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.address" defaultMessage="公司地址" />,
       dataIndex: 'address',
       valueType: 'textarea',
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.phone"
-          defaultMessage="联系方式"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.phone" defaultMessage="联系方式" />,
       dataIndex: 'phone',
       sorter: true,
       hideInForm: true,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.totalAmount"
-          defaultMessage="当前总量"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.totalAmount" defaultMessage="当前总量" />,
       dataIndex: 'total_amount',
       sorter: true,
       search: false,
     },
     {
-      title: (
-        <FormattedMessage
-          id="pages.searchTable.lastAmount"
-          defaultMessage="上次总量"
-        />
-      ),
+      title: <FormattedMessage id="pages.searchTable.lastAmount" defaultMessage="上次总量" />,
       dataIndex: 'last_amount',
       sorter: true,
       search: false,
@@ -185,15 +160,11 @@ const TableList: React.FC = () => {
       // hideInTable: true,
       valueEnum: {
         1: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.normal" defaultMessage="正常" />
-          ),
+          text: <FormattedMessage id="pages.searchTable.nameStatus.normal" defaultMessage="正常" />,
           status: 'Processing',
         },
         2: {
-          text: (
-            <FormattedMessage id="pages.searchTable.nameStatus.cancel" defaultMessage="注销" />
-          ),
+          text: <FormattedMessage id="pages.searchTable.nameStatus.cancel" defaultMessage="注销" />,
           status: 'Success',
         },
       },
@@ -211,12 +182,6 @@ const TableList: React.FC = () => {
           }}
         >
           <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
-        </a>,
-        <a key="subscribeAlert" href="https://procomponents.ant.design/">
-          <FormattedMessage
-            id="pages.searchTable.subscribeAlert"
-            defaultMessage="Subscribe to alerts"
-          />
         </a>,
       ],
     },
