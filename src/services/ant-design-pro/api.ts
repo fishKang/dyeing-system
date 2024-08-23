@@ -1,20 +1,22 @@
 // @ts-ignore
 /* eslint-disable */
 // import { request } from '@umijs/max';
+
 import { request } from '@/.umi/plugin-request/request';
+import { getInitialState } from '@/app';
 import { nanoid } from 'nanoid';
 
 /** 获取当前的用户 GET /api/currentUser */
-export async function currentUser(options?: { [key: string]: any }) {
-  return request<{
-    data: API.CurrentUser;
-  }>('/api/currentUser', {
-    method: 'GET',
-    ...(options || {}),
-  });
-}
+// export async function currentUser(options?: { [key: string]: any }) {
+//   return request<{
+//     data: API.CurrentUser;
+//   }>('/api/currentUser', {
+//     method: 'GET',
+//     ...(options || {}),
+//   });
+// }
 /** 获取当前的用户 GET /api/currentUser */
-export async function getUser(body?: { [key: string]: any }) {
+export async function currentUser(body: API.CurrentUser,options?: { [key: string]: any }) {
   return request<API.Response>('/api/userLogin', {
     method: 'POST',
     headers: {
@@ -22,17 +24,39 @@ export async function getUser(body?: { [key: string]: any }) {
     },
     data: {
       "channel": {
-        "serialno": nanoid(),
+        "serialnum": nanoid(),
         "zoneno": "200",
         "service": "IDmsServiceARS",
         "method": "userLogin",
         "department": "开发",
         "workdate": getNowDate(),
-        "worktime": new Date().toTimeString().substring(0,8)
+        "worktime": new Date().toTimeString().substring(0, 8)
       },
       "user": {
-        "name": "wangkang",
-        "password": "123456",
+        body
+      }
+    },
+  });
+}
+/** 获取当前的用户 GET /api/currentUser */
+export async function getUser(body: API.CurrentUser, options?: { [key: string]: any }) {
+  return request<API.Response>('/api/userLogin', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "service": "IDmsServiceARS",
+        "method": "userLogin",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+      "user": {
+        body
       }
     },
   });
@@ -58,7 +82,7 @@ export async function login(body: API.UserLogin, options?: { [key: string]: any 
   });
 }
 /** 登录接口 POST /api/login/account */
-export async function userLogin(body: API.LoginParams, options?: { [key: string]: any }) {
+export async function userLogin(body: DYEING.User, options?: { [key: string]: any }) {
   return request<API.Response>('/api/userLogin', {
     method: 'POST',
     headers: {
@@ -66,21 +90,21 @@ export async function userLogin(body: API.LoginParams, options?: { [key: string]
     },
     data: {
       "channel": {
-        "serialno": nanoid(),
+        "serialnum": nanoid(),
         "zoneno": "200",
         "service": "IDmsServiceARS",
         "method": "userLogin",
         "department": "开发",
         "workdate": getNowDate(),
-        "worktime": new Date().toTimeString().substring(0,8)
+        "worktime": new Date().toTimeString().substring(0, 8)
       },
-      "user": {
+      "data": {
         ...(body || {}),
       }
     },
   });
 }
-function getNowDate(){
+function getNowDate() {
   const date = new Date();
   let month: string | number = date.getMonth() + 1;
   let strDate: string | number = date.getDate();
@@ -156,33 +180,8 @@ export async function removeRule(options?: { [key: string]: any }) {
   });
 }
 
-/** 登录接口 POST /api/login/account */
-export async function queryDetail(body: API.LoginParams, options?: { [key: string]: any }) {
-  return request<API.Response>('/api/userLogin', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: {
-      "channel": {
-        "serialno": nanoid(),
-        "zoneno": "200",
-        "service": "IDmsServiceARS",
-        "method": "userLogin",
-        "department": "开发",
-        "workdate": getNowDate(),
-        "worktime": new Date().toTimeString().substring(0,8)
-      },
-      "user": {
-        ...(body || {}),
-      }
-    },
-  });
-}
-
-
 export async function queryDyeList(body: API.DyeList, options?: { [key: string]: any }) {
-  return request<API.DyeList >('/api/queryDyeList', {
+  return request<API.DyeList>('/api/queryDyeList', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -221,13 +220,13 @@ export async function queryDyeList2(
     },
     data: {
       "channel": {
-        "serialno": nanoid(),
+        "serialnum": nanoid(),
         "zoneno": "200",
         "service": "IDmsServiceARS",
         "method": "queryDyeList",
         "department": "开发",
         "workdate": getNowDate(),
-        "worktime": new Date().toTimeString().substring(0,8)
+        "worktime": new Date().toTimeString().substring(0, 8)
       },
       "dye": {
         "id": params.key,
@@ -235,7 +234,8 @@ export async function queryDyeList2(
         "phone": params.phone,
         "address": params.address,
         "status": params.status,
-    }
+        // "user":(await getInitialState()).currentUser?.name
+      }
     },
     ...(options || {}),
   });

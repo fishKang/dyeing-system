@@ -10,7 +10,7 @@ import {
   ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
-import { FormattedMessage, useIntl } from '@umijs/max';
+import { FormattedMessage, useIntl, useModel } from '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
 import type { FormValueType } from './components/UpdateForm';
@@ -100,7 +100,8 @@ const TableList: React.FC = () => {
   const actionRef = useRef<ActionType>();
   const [currentRow, setCurrentRow] = useState<API.DyeListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.DyeListItem[]>([]);
-
+  const { initialState, loading, error, refresh, setInitialState } = useModel("@@initialState");
+  console.info(initialState?.currentUser?.name)
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置
@@ -186,7 +187,7 @@ const TableList: React.FC = () => {
       ],
     },
   ];
-
+  
   return (
     <PageContainer>
       <ProTable<API.DyeListItem, API.DyeListItem>

@@ -128,7 +128,19 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleSubmit = async (values: API.LoginParams) => {
+  const cacheUserInfo = async (userInfo : DYEING.User| undefined) => {
+    // const userInfo = await initialState?.fetchUserInfo?.();
+    if (userInfo) {
+      flushSync(() => {
+        setInitialState((s) => ({
+          ...s,
+          user: userInfo,
+        }));
+      });
+    }
+  };
+
+  const handleSubmit = async (values: DYEING.User) => {
     try {
       // 登录
       const msg = await userLogin({ ...values, type });
@@ -138,11 +150,12 @@ const Login: React.FC = () => {
           defaultMessage: '登录成功！',
         });
         message.success(defaultLoginSuccessMessage);
-        await fetchUserInfo(msg.data);
+        await cacheUserInfo(msg.data);
         const urlParams = new URL(window.location.href).searchParams;
         history.push(urlParams.get('redirect') || '/');
         return;
       }
+      
       console.log(msg);
       // 如果失败去设置用户错误信息
       // setUserLoginState(msg);

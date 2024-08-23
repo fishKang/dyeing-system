@@ -149,4 +149,18 @@ declare namespace API {
     current?: number;
     pageSize?: number;
   };
+
+  type Channel = {
+    id        ?:number;//`gorm:"primary_key;auto_increment;comment:主键" json:"id"`
+    serialnum ?:string;//`gorm:"unique;size:20;not null;comment:请求编号" json:"serialnum"`
+    zoneno    ?:string;//`gorm:"size:10;not null;comment:地区号" json:"zoneno"`
+    user      ?:string;//`gorm:"size:50;comment:用户名" json:"user"`
+    service   ?:string;//`gorm:"size:50;not null;comment:服务名" json:"service"`
+    method    ?:string;//`gorm:"size:50;not null;comment:方法名" json:"method"`
+    request   ?:string;//`gorm:"size:200;not null;comment:入参" json:"request"`
+    response  ?:string;//`gorm:"size:500;not null;comment:出参" json:"response"`
+    workdate  ?:string;//`gorm:"size:10;not null;comment:调用日期" json:"workdate"`
+    worktime  ?:string;//`gorm:"size:8;not null;comment:调用时间" json:"worktime"`
+  
+  }
 }
