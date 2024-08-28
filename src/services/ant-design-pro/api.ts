@@ -92,6 +92,7 @@ export async function userLogin(body: DYEING.User, options?: { [key: string]: an
       "channel": {
         "serialnum": nanoid(),
         "zoneno": "200",
+        "user": body.name,
         "service": "IDmsServiceARS",
         "method": "userLogin",
         "department": "开发",
@@ -215,20 +216,18 @@ export async function queryDyeList2(
     headers: {
       'Content-Type': 'application/json',
     },
-    params: {
-      ...params,
-    },
     data: {
       "channel": {
         "serialnum": nanoid(),
         "zoneno": "200",
+        "user": params.name,
         "service": "IDmsServiceARS",
         "method": "queryDyeList",
         "department": "开发",
         "workdate": getNowDate(),
         "worktime": new Date().toTimeString().substring(0, 8)
       },
-      "dye": {
+      "data": {
         "id": params.key,
         "name": params.name,
         "phone": params.phone,
@@ -238,5 +237,36 @@ export async function queryDyeList2(
       }
     },
     ...(options || {}),
+  });
+}
+
+export async function updateDyeDetail(body: API.DyeListItem) {
+  return request<API.RuleListItem>('/api/updateDyeDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": body.name,
+        "service": "IDmsServiceARS",
+        "method": "updateDyeDetail",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+      "data": {
+        "id": body.key,
+        "name": body.name,
+        "total_amount": body.total_amount,
+        "phone": body.phone,
+        "company": body.company,
+        "address": body.address,
+        "status": body.status,
+        // "user":(await getInitialState()).currentUser?.name
+      }
+    },
   });
 }

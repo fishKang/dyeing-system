@@ -1,4 +1,4 @@
-import { addRule, queryDyeList2, removeRule, updateRule } from '@/services/ant-design-pro/api';
+import { addRule, queryDyeList2, removeRule, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -41,13 +41,16 @@ const handleAdd = async (fields: API.DyeListItem) => {
  *
  * @param fields
  */
-const handleUpdate = async (fields: FormValueType) => {
+const handleUpdate = async (fields: API.DyeListItem) => {
   const hide = message.loading('Configuring');
   try {
-    await updateRule({
-      name: fields.name,
-      desc: fields.name,
-      key: fields.key,
+    // await updateRule({
+    //   name: fields.name,
+    //   desc: fields.name,
+    //   key: fields.key,
+    // });
+    await updateDyeDetail({
+      ...fields
     });
     hide();
 
@@ -101,7 +104,6 @@ const TableList: React.FC = () => {
   const [currentRow, setCurrentRow] = useState<API.DyeListItem>();
   const [selectedRowsState, setSelectedRows] = useState<API.DyeListItem[]>([]);
   const { initialState, loading, error, refresh, setInitialState } = useModel("@@initialState");
-  console.info(initialState?.currentUser?.name)
   /**
    * @en-US International configuration
    * @zh-CN 国际化配置

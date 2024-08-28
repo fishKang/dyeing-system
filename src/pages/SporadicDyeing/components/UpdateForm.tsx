@@ -88,8 +88,10 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
       </StepsForm.StepForm>
       <StepsForm.StepForm
         initialValues={{
-          name: props.values.name,
-          desc: props.values.name,
+          company: props.values.company,
+          desc: props.values.company,
+          address: props.values.address,
+          phone: props.values.phone,
         }}
         title={intl.formatMessage({
           id: 'pages.searchTable.updateForm.companyConfig',
@@ -137,7 +139,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           ]}
         />
         <ProFormText
-          name="company"
+          name="phone"
           label={intl.formatMessage({
             id: 'pages.searchTable.phone',
             defaultMessage: '联系方式',
