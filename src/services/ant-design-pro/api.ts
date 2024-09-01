@@ -270,3 +270,32 @@ export async function updateDyeDetail(body: API.DyeListItem) {
     },
   });
 }
+/** 新建规则 POST /api/rule */
+export async function addDyeDetail(body: API.DyeListItem,user:DYEING.User|undefined) {
+  return request<API.RuleListItem>('/api/addDyeDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": user?.name,
+        "service": "IDmsServiceARS",
+        "method": "addDyeDetail",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+      "data": {
+        "name": body.name,
+        "total_amount": body.total_amount,
+        "phone": body.phone,
+        "company": body.company,
+        "address": body.address,
+        "status": body.status,
+      }
+    },
+  });
+}

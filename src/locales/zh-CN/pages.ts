@@ -83,4 +83,6 @@ export default {
   'pages.searchTable.tenThousand': '万',
   'pages.searchTable.batchDeletion': '批量删除',
   'pages.searchTable.batchApproval': '批量审批',
+  'pages.searchTable.dyeName': '染料、助剂名称为必填项',
+  'pages.searchTable.creaseAmount': '新增数量为必填项',
 };

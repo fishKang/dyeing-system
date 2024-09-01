@@ -1,4 +1,4 @@
-import { addRule, queryDyeList2, removeRule, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
+import { addDyeDetail, addRule, queryDyeList2, removeRule, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -6,6 +6,7 @@ import {
   ModalForm,
   PageContainer,
   ProDescriptions,
+  ProFormDigit,
   ProFormText,
   ProFormTextArea,
   ProTable,
@@ -21,10 +22,10 @@ import UpdateForm from './components/UpdateForm';
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.DyeListItem) => {
+const handleAdd = async (fields: API.DyeListItem,user:DYEING.User|undefined) => {
   const hide = message.loading('正在添加');
   try {
-    await addRule({ ...fields });
+    await addDyeDetail({ ...fields },user);
     hide();
     message.success('Added successfully');
     return true;
@@ -215,13 +216,13 @@ const TableList: React.FC = () => {
         ]}
         request={queryDyeList2}
         columns={columns}
-        rowSelection={{
-          onChange: (_, selectedRows) => {
-            setSelectedRows(selectedRows);
-          },
-        }}
+        // rowSelection={{
+        //   onChange: (_, selectedRows) => {
+        //     setSelectedRows(selectedRows);
+        //   },
+        // }}
       />
-      {selectedRowsState?.length > 0 && (
+      {/* {selectedRowsState?.length > 0 && (
         <FooterToolbar
           extra={
             <div>
@@ -259,7 +260,7 @@ const TableList: React.FC = () => {
             />
           </Button>
         </FooterToolbar>
-      )}
+      )} */}
       <ModalForm
         title={intl.formatMessage({
           id: 'pages.searchTable.createForm.newRule',
@@ -269,7 +270,7 @@ const TableList: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleModalOpen}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.DyeListItem);
+          const success = await handleAdd(value as API.DyeListItem,initialState?.user as DYEING.User);
           if (success) {
             handleModalOpen(false);
             if (actionRef.current) {
@@ -279,21 +280,104 @@ const TableList: React.FC = () => {
         }}
       >
         <ProFormText
+          name="name"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.dyeingName',
+            defaultMessage: '染料、助剂名称',
+          })}
+          width="md"
+
           rules={[
             {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.searchTable.ruleName"
-                  defaultMessage="Rule name is required"
+                  id="pages.searchTable.dyeName"
+                  defaultMessage="请输入染料、助剂名称！"
                 />
               ),
             },
           ]}
-          width="md"
-          name="name"
         />
-        <ProFormTextArea width="md" name="desc" />
+        <ProFormDigit
+          name="total_amount"
+          width="md"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.creaseAmount',
+            defaultMessage: '新增数量为必填项',
+          })}
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.dyeName"
+                  defaultMessage="请输入染料、助剂名称！"
+                />
+              ),
+            },
+          ]}
+        />
+        <ProFormText
+          name="company"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.company',
+            defaultMessage: '公司名称',
+          })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.company.nameRules"
+                  defaultMessage="请输入公司名称！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
+        />
+        <ProFormText
+          name="address"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.address',
+            defaultMessage: '公司地址',
+          })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.company.addressRules"
+                  defaultMessage="请输入公司地址！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
+        />
+        <ProFormText
+          name="phone"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.phone',
+            defaultMessage: '联系方式',
+          })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.company.phoneRules"
+                  defaultMessage="请输入公司联系方式！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
+        />
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
