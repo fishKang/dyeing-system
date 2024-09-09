@@ -76,9 +76,9 @@ const InfoCard: React.FC<{
       >
         {desc}
       </div>
-      <a href={href} target="_blank" rel="noreferrer">
+      {/* <a href={href} target="_blank" rel="noreferrer">
         了解更多 {'>'}
-      </a>
+      </a> */}
     </div>
   );
 };
@@ -114,7 +114,7 @@ const Welcome: React.FC = () => {
               color: token.colorTextHeading,
             }}
           >
-            欢迎使用 Ant Design Pro
+            欢迎使用 染色系统
           </div>
           <p
             style={{
@@ -126,8 +126,8 @@ const Welcome: React.FC = () => {
               width: '65%',
             }}
           >
-            Ant Design Pro 是一个整合了 umi，Ant Design 和 ProComponents
-            的脚手架方案。致力于在设计规范和基础组件的基础上，继续向上构建，提炼出典型模板/业务组件/配套设计资源，进一步提升企业级中后台产品设计研发过程中的『用户』和『设计者』的体验。
+            染色系统是一个整合了 umi，Ant Design 和 ProComponents
+            的脚手架方案。它基于前端使用TypeScript，后端使用Gin框架孕育而生。
           </p>
           <div
             style={{

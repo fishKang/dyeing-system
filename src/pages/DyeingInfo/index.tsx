@@ -22,7 +22,7 @@ import UpdateForm from './components/UpdateForm';
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: API.DyeListItem,user:DYEING.User|undefined) => {
+const handleAdd = async (fields: DYEING.DyeListItem,user:DYEING.User|undefined) => {
   const hide = message.loading('正在添加');
   try {
     await addDyeDetail({ ...fields },user);
@@ -102,8 +102,8 @@ const TableList: React.FC = () => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
 
   const actionRef = useRef<ActionType>();
-  const [currentRow, setCurrentRow] = useState<API.DyeListItem>();
-  const [selectedRowsState, setSelectedRows] = useState<API.DyeListItem[]>([]);
+  const [currentRow, setCurrentRow] = useState<DYEING.DyeListItem>();
+  const [selectedRowsState, setSelectedRows] = useState<DYEING.DyeListItem[]>([]);
   const { initialState, loading, error, refresh, setInitialState } = useModel("@@initialState");
   /**
    * @en-US International configuration
@@ -111,7 +111,7 @@ const TableList: React.FC = () => {
    * */
   const intl = useIntl();
 
-  const columns: ProColumns<API.DyeListItem>[] = [
+  const columns: ProColumns<DYEING.DyeListItem>[] = [
     {
       title: <FormattedMessage id="pages.searchTable.dyeingName" defaultMessage="染料、助剂名称" />,
       dataIndex: 'name',
@@ -174,7 +174,7 @@ const TableList: React.FC = () => {
       },
     },
     {
-      title: <FormattedMessage id="pages.searchTable.titleOption" defaultMessage="Operating" />,
+      title: <FormattedMessage id="pages.searchTable.modify" defaultMessage="修改" />,
       dataIndex: 'option',
       valueType: 'option',
       render: (_, record) => [
@@ -185,7 +185,7 @@ const TableList: React.FC = () => {
             setCurrentRow(record);
           }}
         >
-          <FormattedMessage id="pages.searchTable.config" defaultMessage="Configuration" />
+          <FormattedMessage id="pages.searchTable.modify" defaultMessage="修改" />
         </a>,
       ],
     },
@@ -193,7 +193,7 @@ const TableList: React.FC = () => {
   
   return (
     <PageContainer>
-      <ProTable<API.DyeListItem, API.DyeListItem>
+      <ProTable<DYEING.DyeListItem, DYEING.DyeListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',
@@ -270,7 +270,7 @@ const TableList: React.FC = () => {
         open={createModalOpen}
         onOpenChange={handleModalOpen}
         onFinish={async (value) => {
-          const success = await handleAdd(value as API.DyeListItem,initialState?.user as DYEING.User);
+          const success = await handleAdd(value as DYEING.DyeListItem,initialState?.user as DYEING.User);
           if (success) {
             handleModalOpen(false);
             if (actionRef.current) {

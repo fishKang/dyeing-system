@@ -1,6 +1,6 @@
 declare namespace DYEING {
   type Channel = {
-    id        ?:number;//`gorm:"primary_key;auto_increment;comment:主键" json:"id"`
+    id        ?:string;//`gorm:"primary_key;auto_increment;comment:主键" json:"id"`
     serialnum ?:string;//`gorm:"unique;size:20;not null;comment:请求编号" json:"serialnum"`
     zoneno    ?:string;//`gorm:"size:10;not null;comment:地区号" json:"zoneno"`
     user      ?:string;//`gorm:"size:50;comment:用户名" json:"user"`
@@ -24,16 +24,25 @@ declare namespace DYEING {
     unreadCount?: number;
     access?: string;
   };
-  type LoginRequest={
-    channel?:Channel;
-    user?:User;
-  }
-  type LoginResponse = {
+  type CustomerList = {
     returncode?: string;
     returnmsg?: string;
     returninfo?: string;
-    data?: User;
+    data?: CustomerListItem[];
+    /** 列表的内容总数 */
+    total?: number;
+    success?: boolean;
   };
+  type CustomerListItem = {
+    id        ?:string   ;//`gorm:"primary_key;auto_increment;comment:主键" json:"id"`
+    name      ?:string   ;//`gorm:"size:30;not null;comment:客户名称" json:"name"`
+    person_name?:string   ;//`gorm:"size:20;not null;comment:联系人姓名" json:"person_name"`
+    phone     ?:string   ;//`gorm:"size:15;not null;comment:手机号" json:"phone"`
+    email     ?:string   ;//`gorm:"size:30;comment:邮箱地址" json:"email"`
+    address   ?:string   ;//`gorm:"size:100;not null;comment:联系住址" json:"address"`
+    status    ?:number   ;// `gorm:"not null;comment:状态 1-正常，2-注销" json:"status"`
+    bak       ?:string   ;//`gorm:"size:100;comment:备注" json:"bak"`
+  }
 
   type DyeList = {
     returncode?: string;
@@ -58,16 +67,7 @@ declare namespace DYEING {
     current?: number;
     pageSize?: number;
   };
-  type LoginRequest={
-    channel?:Channel;
-    user?:User;
-  }
-  type DyeResponse = {
-    returncode?: string;
-    returnmsg?: string;
-    returninfo?: string;
-    data?: API.DyeList;
-  };
+
   type ErrorResponse = {
     /** 业务约定的错误码 */
     errorCode: string;

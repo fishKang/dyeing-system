@@ -299,3 +299,34 @@ export async function addDyeDetail(body: API.DyeListItem,user:DYEING.User|undefi
     },
   });
 }
+
+export async function queryCustomerList(body: DYEING.CustomerListItem,user:DYEING.User) {
+  return request<API.DyeList>('/api/queryCustomerList', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": user.name,
+        "service": "IDmsServiceARS",
+        "method": "queryDyeList",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+      "data": {
+        "id": body.id,
+        "name": body.name,
+        "person_name": body.person_name,
+        "phone": body.phone,
+        "email": body.email,
+        "address": body.address,
+        "status": body.status,
+        // "user":(await getInitialState()).currentUser?.name
+      }
+    },
+  });
+}
