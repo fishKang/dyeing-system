@@ -1,4 +1,4 @@
-import { addDyeDetail, addRule, queryCustomerList, queryDyeList2, removeRule, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
+import { addCustomerDetail, addDyeDetail, addRule, queryCustomerList, queryDyeList2, removeRule, updateCustomerDetail, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -22,16 +22,22 @@ import UpdateForm from './components/UpdateForm';
  * @zh-CN 添加节点
  * @param fields
  */
-const handleAdd = async (fields: DYEING.DyeListItem,user:DYEING.User|undefined) => {
+const handleAdd = async (customer: DYEING.CustomerListItem,user:DYEING.User|undefined) => {
   const hide = message.loading('正在添加');
   try {
-    await addDyeDetail({ ...fields },user);
+    const msg = await addCustomerDetail(customer,user);
     hide();
-    message.success('Added successfully');
-    return true;
+    if (msg.returncode === '0000') {
+      message.success('添加成功');
+      return true;
+    }else{
+      message.error('添加失败，请重试!');
+      return false;
+    }
+   
   } catch (error) {
     hide();
-    message.error('Adding failed, please try again!');
+    message.error('添加失败，请重试!');
     return false;
   }
 };
@@ -42,24 +48,21 @@ const handleAdd = async (fields: DYEING.DyeListItem,user:DYEING.User|undefined) 
  *
  * @param fields
  */
-const handleUpdate = async (fields: DYEING.CustomerListItem) => {
+const handleUpdate = async (customer: DYEING.CustomerListItem, user: DYEING.User) => {
   const hide = message.loading('Configuring');
   try {
-    // await updateRule({
-    //   name: fields.name,
-    //   desc: fields.name,
-    //   key: fields.key,
-    // });
-    await updateDyeDetail({
-      ...fields
-    });
+    const msg = await updateCustomerDetail(customer,user);
     hide();
-
-    message.success('Configuration is successful');
-    return true;
+    if (msg.returncode === '0000') {
+      message.success('修改成功');
+      return true;
+    }else{
+      message.error('修改失败，请重试!');
+      return false;
+    }
   } catch (error) {
     hide();
-    message.error('Configuration failed, please try again!');
+    message.error('修改失败，请重试!');
     return false;
   }
 };
@@ -155,7 +158,7 @@ const TableList: React.FC = () => {
       title: <FormattedMessage id="pages.searchTable.status" defaultMessage="状态" />,
       dataIndex: 'status',
       hideInForm: true,
-      // hideInTable: true,
+      hideInSearch: true,
       valueEnum: {
         1: {
           text: <FormattedMessage id="pages.searchTable.nameStatus.normal" defaultMessage="正常" />,
@@ -262,8 +265,8 @@ const TableList: React.FC = () => {
       )} */}
       <ModalForm
         title={intl.formatMessage({
-          id: 'pages.searchTable.createForm.newRule',
-          defaultMessage: 'New rule',
+          id: 'pages.searchTable.createForm.newCustomer',
+          defaultMessage: '新增客户信息',
         })}
         width="400px"
         open={createModalOpen}
@@ -281,8 +284,8 @@ const TableList: React.FC = () => {
         <ProFormText
           name="name"
           label={intl.formatMessage({
-            id: 'pages.searchTable.dyeingName',
-            defaultMessage: '染料、助剂名称',
+            id: 'pages.searchTable.customerName',
+            defaultMessage: '客户名称',
           })}
           width="md"
 
@@ -291,37 +294,18 @@ const TableList: React.FC = () => {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.searchTable.dyeName"
-                  defaultMessage="请输入染料、助剂名称！"
-                />
-              ),
-            },
-          ]}
-        />
-        <ProFormDigit
-          name="total_amount"
-          width="md"
-          label={intl.formatMessage({
-            id: 'pages.searchTable.creaseAmount',
-            defaultMessage: '新增数量为必填项',
-          })}
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.dyeName"
-                  defaultMessage="请输入染料、助剂名称！"
+                  id="pages.searchTable.updateForm.customer.nameRules"
+                  defaultMessage="客户名称为必填项"
                 />
               ),
             },
           ]}
         />
         <ProFormText
-          name="company"
+          name="person_name"
           label={intl.formatMessage({
-            id: 'pages.searchTable.company',
-            defaultMessage: '公司名称',
+            id: 'pages.searchTable.personName',
+            defaultMessage: '联系人姓名',
           })}
           width="md"
           rules={[
@@ -329,8 +313,48 @@ const TableList: React.FC = () => {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.searchTable.updateForm.company.nameRules"
-                  defaultMessage="请输入公司名称！并大于1个字符!"
+                  id="pages.searchTable.updateForm.customer.personNameRules"
+                  defaultMessage="请输入联系人姓名！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
+        />
+         <ProFormText
+          name="phone"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.phone',
+            defaultMessage: '联系方式',
+          })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.customer.phoneRules"
+                  defaultMessage="请输入公司联系方式！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
+        />
+         <ProFormText
+          name="email"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.email',
+            defaultMessage: '邮箱',
+          })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.customer.emailRules"
+                  defaultMessage="请输入邮箱！并大于1个字符!"
                 />
               ),
               min: 1,
@@ -349,7 +373,7 @@ const TableList: React.FC = () => {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.searchTable.updateForm.company.addressRules"
+                  id="pages.searchTable.updateForm.customer.addressRules"
                   defaultMessage="请输入公司地址！并大于1个字符!"
                 />
               ),
@@ -357,30 +381,19 @@ const TableList: React.FC = () => {
             },
           ]}
         />
-        <ProFormText
-          name="phone"
+         <ProFormText
+          name="bak"
           label={intl.formatMessage({
-            id: 'pages.searchTable.phone',
-            defaultMessage: '联系方式',
+            id: 'pages.searchTable.remark',
+            defaultMessage: '备注',
           })}
           width="md"
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.company.phoneRules"
-                  defaultMessage="请输入公司联系方式！并大于1个字符!"
-                />
-              ),
-              min: 1,
-            },
-          ]}
         />
+       
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
-          const success = await handleUpdate(value);
+          const success = await handleUpdate(value as DYEING.CustomerListItem,initialState?.user as DYEING.User);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

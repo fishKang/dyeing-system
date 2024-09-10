@@ -9,13 +9,13 @@ export type FormValueType = {
   type?: string;
   time?: string;
   frequency?: string;
-} & Partial<API.DyeListItem>;
+} & Partial<DYEING.CustomerListItem>;
 
 export type UpdateFormProps = {
   onCancel: (flag?: boolean, formVals?: FormValueType) => void;
   onSubmit: (values: FormValueType) => Promise<void>;
   updateModalOpen: boolean;
-  values: Partial<API.DyeListItem>;
+  values: Partial<DYEING.CustomerListItem>;
 };
 
 const UpdateForm: React.FC<UpdateFormProps> = (props) => {
@@ -51,45 +51,58 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         initialValues={{
           name: props.values.name,
           desc: props.values.name,
+          person_name: props.values.person_name,
         }}
         title={intl.formatMessage({
           id: 'pages.searchTable.updateForm.basicConfig',
           defaultMessage: '基本信息',
         })}
       >
-        <ProFormText
+       <ProFormText
           name="name"
           label={intl.formatMessage({
-            id: 'pages.searchTable.dyeingName',
-            defaultMessage: '染料、助剂名称',
+            id: 'pages.searchTable.customerName',
+            defaultMessage: '客户名称',
           })}
           width="md"
 
-          // rules={[
-          //   {
-          //     required: true,
-          //     message: (
-          //       <FormattedMessage
-          //         id="pages.searchTable.updateForm.ruleName.nameRules"
-          //         defaultMessage="请输入规则名称！"
-          //       />
-          //     ),
-          //   },
-          // ]}
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.customer.nameRules"
+                  defaultMessage="客户名称为必填项"
+                />
+              ),
+            },
+          ]}
         />
-        <ProFormDigit
-          name="total_amount"
-          width="md"
+        <ProFormText
+          name="person_name"
           label={intl.formatMessage({
-            id: 'pages.searchTable.updateForm.creaseAmount',
-            defaultMessage: '新增数量',
+            id: 'pages.searchTable.personName',
+            defaultMessage: '联系人姓名',
           })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.customer.personNameRules"
+                  defaultMessage="请输入联系人姓名！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
         />
       </StepsForm.StepForm>
       <StepsForm.StepForm
         initialValues={{
-          company: props.values.company,
-          desc: props.values.company,
+          email: props.values.email,
+          bak: props.values.bak,
           address: props.values.address,
           phone: props.values.phone,
         }}
@@ -98,11 +111,11 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
           defaultMessage: '公司信息',
         })}
       >
-        <ProFormText
-          name="company"
+         <ProFormText
+          name="phone"
           label={intl.formatMessage({
-            id: 'pages.searchTable.company',
-            defaultMessage: '公司名称',
+            id: 'pages.searchTable.phone',
+            defaultMessage: '联系方式',
           })}
           width="md"
           rules={[
@@ -110,8 +123,28 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.searchTable.updateForm.company.nameRules"
-                  defaultMessage="请输入公司名称！并大于1个字符!"
+                  id="pages.searchTable.updateForm.customer.phoneRules"
+                  defaultMessage="请输入公司联系方式！并大于1个字符!"
+                />
+              ),
+              min: 1,
+            },
+          ]}
+        />
+         <ProFormText
+          name="email"
+          label={intl.formatMessage({
+            id: 'pages.searchTable.email',
+            defaultMessage: '邮箱',
+          })}
+          width="md"
+          rules={[
+            {
+              required: true,
+              message: (
+                <FormattedMessage
+                  id="pages.searchTable.updateForm.customer.emailRules"
+                  defaultMessage="请输入邮箱！并大于1个字符!"
                 />
               ),
               min: 1,
@@ -130,7 +163,7 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
               required: true,
               message: (
                 <FormattedMessage
-                  id="pages.searchTable.updateForm.company.addressRules"
+                  id="pages.searchTable.updateForm.customer.addressRules"
                   defaultMessage="请输入公司地址！并大于1个字符!"
                 />
               ),
@@ -138,25 +171,13 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
             },
           ]}
         />
-        <ProFormText
-          name="phone"
+         <ProFormText
+          name="bak"
           label={intl.formatMessage({
-            id: 'pages.searchTable.phone',
-            defaultMessage: '联系方式',
+            id: 'pages.searchTable.remark',
+            defaultMessage: '备注',
           })}
           width="md"
-          rules={[
-            {
-              required: true,
-              message: (
-                <FormattedMessage
-                  id="pages.searchTable.updateForm.company.phoneRules"
-                  defaultMessage="请输入公司联系方式！并大于1个字符!"
-                />
-              ),
-              min: 1,
-            },
-          ]}
         />
       </StepsForm.StepForm>
     </StepsForm>

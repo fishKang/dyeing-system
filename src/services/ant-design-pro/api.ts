@@ -330,3 +330,62 @@ export async function queryCustomerList(body: DYEING.CustomerListItem,user:DYEIN
     },
   });
 }
+
+/** 新建规则 POST /api/rule */
+export async function addCustomerDetail(customer: DYEING.CustomerListItem,user:DYEING.User|undefined) {
+  return request<DYEING.CustomerList>('/api/addCustomerDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": user?.name,
+        "service": "IDmsServiceARS",
+        "method": "addCustomerDetail",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+      "data": {
+        "name": customer.name,
+        "person_name": customer.person_name,
+        "phone": customer.phone,
+        "email": customer.email,
+        "address": customer.address,
+        "bak": customer.bak,
+      }
+    },
+  });
+}
+
+export async function updateCustomerDetail(customer: DYEING.CustomerListItem,user:DYEING.User|undefined) {
+  return request<DYEING.CustomerList>('/api/updateCustomerDetail', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": user?.name,
+        "service": "IDmsServiceARS",
+        "method": "updateDyeDetail",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+     "data": {
+        "name": customer.name,
+        "person_name": customer.person_name,
+        "phone": customer.phone,
+        "email": customer.email,
+        "address": customer.address,
+        "bak": customer.bak,
+      }
+    },
+  });
+}
