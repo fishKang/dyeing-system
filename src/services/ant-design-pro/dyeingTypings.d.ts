@@ -1,4 +1,10 @@
 declare namespace DYEING {
+  type Response = {
+    returncode?: string;
+    returnmsg?: string;
+    returninfo?: string;
+    data?: API.CurrentUser;
+  };
   type Channel = {
     id        ?:string;//`gorm:"primary_key;auto_increment;comment:主键" json:"id"`
     serialnum ?:string;//`gorm:"unique;size:20;not null;comment:请求编号" json:"serialnum"`
@@ -14,6 +20,7 @@ declare namespace DYEING {
   type User = {
     id?: string;
     name?: string;
+    avatar?: string;
     password?: string;
     autoLogin?: boolean;
     type?: string;
@@ -55,7 +62,7 @@ declare namespace DYEING {
   };
 
   type DyeListItem = {
-    key?: number;
+    id?: number;
     name?: string;
     total_amount?: number;
     last_amount?: number;

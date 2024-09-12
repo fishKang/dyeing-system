@@ -1,4 +1,4 @@
-import { addDyeDetail, addRule, queryDyeList2, removeRule, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
+import { addDyeDetail, queryDyeList, removeRule, updateDyeDetail } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
@@ -25,7 +25,7 @@ import UpdateForm from './components/UpdateForm';
 const handleAdd = async (fields: DYEING.DyeListItem,user:DYEING.User|undefined) => {
   const hide = message.loading('正在添加');
   try {
-    await addDyeDetail({ ...fields },user);
+    await addDyeDetail(fields,user);
     hide();
     message.success('Added successfully');
     return true;
@@ -42,21 +42,18 @@ const handleAdd = async (fields: DYEING.DyeListItem,user:DYEING.User|undefined) 
  *
  * @param fields
  */
-const handleUpdate = async (fields: API.DyeListItem) => {
+const handleUpdate = async (dye: DYEING.DyeListItem, user: DYEING.User) => {
   const hide = message.loading('Configuring');
   try {
-    // await updateRule({
-    //   name: fields.name,
-    //   desc: fields.name,
-    //   key: fields.key,
-    // });
-    await updateDyeDetail({
-      ...fields
-    });
+    const msg = await updateDyeDetail(dye,user);
     hide();
-
-    message.success('Configuration is successful');
-    return true;
+    if (msg.returncode === '0000') {
+      message.success('修改成功');
+      return true;
+    }else{
+      message.error('修改失败，请重试!');
+      return false;
+    }
   } catch (error) {
     hide();
     message.error('Configuration failed, please try again!');
@@ -214,7 +211,7 @@ const TableList: React.FC = () => {
             <PlusOutlined /> <FormattedMessage id="pages.searchTable.new" defaultMessage="New" />
           </Button>,
         ]}
-        request={queryDyeList2}
+        request={queryDyeList}
         columns={columns}
         // rowSelection={{
         //   onChange: (_, selectedRows) => {
@@ -381,7 +378,7 @@ const TableList: React.FC = () => {
       </ModalForm>
       <UpdateForm
         onSubmit={async (value) => {
-          const success = await handleUpdate(value);
+          const success = await handleUpdate(value as DYEING.DyeListItem,initialState?.user as DYEING.User);
           if (success) {
             handleUpdateModalOpen(false);
             setCurrentRow(undefined);

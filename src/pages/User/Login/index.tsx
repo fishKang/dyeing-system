@@ -16,7 +16,7 @@ import {
   ProFormText,
 } from '@ant-design/pro-components';
 import { FormattedMessage, history, SelectLang, useIntl, useModel, Helmet } from '@umijs/max';
-import { Alert, message, Tabs } from 'antd';
+import { Alert, Button, message, Tabs } from 'antd';
 import Settings from '../../../../config/defaultSettings';
 import React, { useState } from 'react';
 import { flushSync } from 'react-dom';
@@ -309,6 +309,7 @@ const Login: React.FC = () => {
           </div>
         </LoginForm>
       </div>
+      <Button type="primary" size="large" href="/user/register" style={{ width:'21%',position:'relative',left:'40%'}}>注册</Button>
       <Footer />
     </div>
   );

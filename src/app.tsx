@@ -83,13 +83,13 @@ export async function getInitialState(): Promise<{
 export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) => {
   return {
     actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
-    // avatarProps: {
-    //   src: initialState?.currentUser?.avatar,
-    //   title: <AvatarName />,
-    //   render: (_, avatarChildren) => {
-    //     return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
-    //   },
-    // },
+    avatarProps: {
+      src: initialState?.user?.avatar,
+      title: <AvatarName />,
+      render: (_, avatarChildren) => {
+        return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
+      },
+    },
     waterMarkProps: {
       content: initialState?.user?.name,
     },

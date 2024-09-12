@@ -3,7 +3,6 @@
 // import { request } from '@umijs/max';
 
 import { request } from '@/.umi/plugin-request/request';
-import { getInitialState } from '@/app';
 import { nanoid } from 'nanoid';
 
 /** 获取当前的用户 GET /api/currentUser */
@@ -17,7 +16,7 @@ import { nanoid } from 'nanoid';
 // }
 /** 获取当前的用户 GET /api/currentUser */
 export async function currentUser(body: API.CurrentUser,options?: { [key: string]: any }) {
-  return request<API.Response>('/api/userLogin', {
+  return request<API.Response>('/api/user/userLogin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -32,7 +31,7 @@ export async function currentUser(body: API.CurrentUser,options?: { [key: string
         "workdate": getNowDate(),
         "worktime": new Date().toTimeString().substring(0, 8)
       },
-      "user": {
+      "data": {
         body
       }
     },
@@ -83,7 +82,7 @@ export async function login(body: API.UserLogin, options?: { [key: string]: any 
 }
 /** 登录接口 POST /api/login/account */
 export async function userLogin(body: DYEING.User, options?: { [key: string]: any }) {
-  return request<API.Response>('/api/userLogin', {
+  return request<API.Response>('/api/user/userLogin', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -180,38 +179,8 @@ export async function removeRule(options?: { [key: string]: any }) {
     },
   });
 }
-
-export async function queryDyeList(body: API.DyeList, options?: { [key: string]: any }) {
-  return request<API.DyeList>('/api/queryDyeList', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    data: body,
-    ...(options || {}),
-  });
-}
-
-export async function queryDyeList2(
-  params: {
-    // query
-    key?: number;
-    name?: string;
-    total_amount?: number;
-    last_amount?: number;
-    phone?: string;
-    company?: string;
-    address?: string;
-    status?: number;
-    updatedAt?: string;
-    /** 当前的页码 */
-    current?: number;
-    /** 页面的容量 */
-    pageSize?: number;
-  },
-  options?: { [key: string]: any },
-) {
-  return request<API.DyeList>('/api/queryDyeList', {
+export async function queryDyeList(dye: DYEING.DyeListItem,user:DYEING.User) {
+  return request<DYEING.DyeList>('/api/dye/queryDyeList', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -220,7 +189,7 @@ export async function queryDyeList2(
       "channel": {
         "serialnum": nanoid(),
         "zoneno": "200",
-        "user": params.name,
+        "user": user?.name,
         "service": "IDmsServiceARS",
         "method": "queryDyeList",
         "department": "开发",
@@ -228,20 +197,18 @@ export async function queryDyeList2(
         "worktime": new Date().toTimeString().substring(0, 8)
       },
       "data": {
-        "id": params.key,
-        "name": params.name,
-        "phone": params.phone,
-        "address": params.address,
-        "status": params.status,
-        // "user":(await getInitialState()).currentUser?.name
+        "id": dye.id,
+        "name": dye.name,
+        "phone": dye.phone,
+        "address": dye.address,
+        "status": dye.status,
       }
     },
-    ...(options || {}),
   });
 }
 
-export async function updateDyeDetail(body: API.DyeListItem) {
-  return request<API.RuleListItem>('/api/updateDyeDetail', {
+export async function updateDyeDetail(dye: DYEING.DyeListItem,user:DYEING.User|undefined) {
+  return request<DYEING.DyeList>('/api/dye/updateDyeDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -250,7 +217,7 @@ export async function updateDyeDetail(body: API.DyeListItem) {
       "channel": {
         "serialnum": nanoid(),
         "zoneno": "200",
-        "user": body.name,
+        "user": user?.name,
         "service": "IDmsServiceARS",
         "method": "updateDyeDetail",
         "department": "开发",
@@ -258,21 +225,21 @@ export async function updateDyeDetail(body: API.DyeListItem) {
         "worktime": new Date().toTimeString().substring(0, 8)
       },
       "data": {
-        "id": body.key,
-        "name": body.name,
-        "total_amount": body.total_amount,
-        "phone": body.phone,
-        "company": body.company,
-        "address": body.address,
-        "status": body.status,
+        "id": dye.id,
+        "name": dye.name,
+        "total_amount": dye.total_amount,
+        "phone": dye.phone,
+        "company": dye.company,
+        "address": dye.address,
+        "status": dye.status,
         // "user":(await getInitialState()).currentUser?.name
       }
     },
   });
 }
 /** 新建规则 POST /api/rule */
-export async function addDyeDetail(body: API.DyeListItem,user:DYEING.User|undefined) {
-  return request<API.RuleListItem>('/api/addDyeDetail', {
+export async function addDyeDetail(dye: API.DyeListItem,user:DYEING.User|undefined) {
+  return request<DYEING.DyeList>('/api/dye/addDyeDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -289,19 +256,19 @@ export async function addDyeDetail(body: API.DyeListItem,user:DYEING.User|undefi
         "worktime": new Date().toTimeString().substring(0, 8)
       },
       "data": {
-        "name": body.name,
-        "total_amount": body.total_amount,
-        "phone": body.phone,
-        "company": body.company,
-        "address": body.address,
-        "status": body.status,
+        "name": dye.name,
+        "total_amount": dye.total_amount,
+        "phone": dye.phone,
+        "company": dye.company,
+        "address": dye.address,
+        "status": dye.status,
       }
     },
   });
 }
 
 export async function queryCustomerList(body: DYEING.CustomerListItem,user:DYEING.User) {
-  return request<API.DyeList>('/api/queryCustomerList', {
+  return request<DYEING.CustomerList>('/api/customer/queryCustomerList', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -312,7 +279,7 @@ export async function queryCustomerList(body: DYEING.CustomerListItem,user:DYEIN
         "zoneno": "200",
         "user": user.name,
         "service": "IDmsServiceARS",
-        "method": "queryDyeList",
+        "method": "queryCustomerList",
         "department": "开发",
         "workdate": getNowDate(),
         "worktime": new Date().toTimeString().substring(0, 8)
@@ -333,7 +300,7 @@ export async function queryCustomerList(body: DYEING.CustomerListItem,user:DYEIN
 
 /** 新建规则 POST /api/rule */
 export async function addCustomerDetail(customer: DYEING.CustomerListItem,user:DYEING.User|undefined) {
-  return request<DYEING.CustomerList>('/api/addCustomerDetail', {
+  return request<DYEING.CustomerList>('/api/customer/addCustomerDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -355,6 +322,7 @@ export async function addCustomerDetail(customer: DYEING.CustomerListItem,user:D
         "phone": customer.phone,
         "email": customer.email,
         "address": customer.address,
+        "status": customer.status,
         "bak": customer.bak,
       }
     },
@@ -362,7 +330,7 @@ export async function addCustomerDetail(customer: DYEING.CustomerListItem,user:D
 }
 
 export async function updateCustomerDetail(customer: DYEING.CustomerListItem,user:DYEING.User|undefined) {
-  return request<DYEING.CustomerList>('/api/updateCustomerDetail', {
+  return request<DYEING.CustomerList>('/api/customer/updateCustomerDetail', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -373,7 +341,7 @@ export async function updateCustomerDetail(customer: DYEING.CustomerListItem,use
         "zoneno": "200",
         "user": user?.name,
         "service": "IDmsServiceARS",
-        "method": "updateDyeDetail",
+        "method": "updateCustomerDetail",
         "department": "开发",
         "workdate": getNowDate(),
         "worktime": new Date().toTimeString().substring(0, 8)
@@ -385,6 +353,30 @@ export async function updateCustomerDetail(customer: DYEING.CustomerListItem,use
         "email": customer.email,
         "address": customer.address,
         "bak": customer.bak,
+      }
+    },
+  });
+}
+
+export async function userRegister(user:DYEING.User) {
+  return request<DYEING.Response>('/api/user/addUserDetail', {
+    method: 'POST',
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": user?.name,
+        "service": "IDmsServiceARS",
+        "method": "addUserDetail",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+     "data": {
+        "name": user.name,
+        "password": user.password,
+        "phone": user.phone,
+        "email": user.email,
       }
     },
   });

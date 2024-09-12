@@ -1,20 +1,16 @@
-import { addCustomerDetail, addDyeDetail, addRule, queryCustomerList, queryDyeList2, removeRule, updateCustomerDetail, updateDyeDetail, updateRule } from '@/services/ant-design-pro/api';
+import { addCustomerDetail,  queryCustomerList, removeRule, updateCustomerDetail } from '@/services/ant-design-pro/api';
 import { PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns, ProDescriptionsItemProps } from '@ant-design/pro-components';
 import {
-  FooterToolbar,
   ModalForm,
   PageContainer,
   ProDescriptions,
-  ProFormDigit,
   ProFormText,
-  ProFormTextArea,
   ProTable,
 } from '@ant-design/pro-components';
 import { FormattedMessage, useIntl, useModel } from '@umijs/max';
 import { Button, Drawer, message } from 'antd';
 import React, { useRef, useState } from 'react';
-import type { FormValueType } from './components/UpdateForm';
 import UpdateForm from './components/UpdateForm';
 
 /**
@@ -158,7 +154,7 @@ const TableList: React.FC = () => {
       title: <FormattedMessage id="pages.searchTable.status" defaultMessage="状态" />,
       dataIndex: 'status',
       hideInForm: true,
-      hideInSearch: true,
+      // hideInSearch: true,
       valueEnum: {
         1: {
           text: <FormattedMessage id="pages.searchTable.nameStatus.normal" defaultMessage="正常" />,
@@ -195,7 +191,7 @@ const TableList: React.FC = () => {
   
   return (
     <PageContainer>
-      <ProTable<DYEING.CustomerListItem, DYEING.User>
+      <ProTable<DYEING.CustomerListItem, DYEING.CustomerListItem>
         headerTitle={intl.formatMessage({
           id: 'pages.searchTable.title',
           defaultMessage: 'Enquiry form',

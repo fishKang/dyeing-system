@@ -20,6 +20,26 @@ export default [
         path: '/user/login',
         component: './User/Login',
       },
+      {
+        path: '/user',
+        redirect: '/User/login',
+      },
+      {
+        name: 'register-result',
+        icon: 'smile',
+        path: '/user/register-result',
+        component: './User/register-result',
+      },
+      {
+        name: 'register',
+        icon: 'smile',
+        path: '/user/register',
+        component: './User/register',
+      },
+      {
+        component: '404',
+        path: '/user/*',
+      },
     ],
   },
   {
@@ -46,18 +66,6 @@ export default [
       },
     ],
   },
-  // {
-  //   name: 'list.table-list',
-  //   icon: 'table',
-  //   path: '/list',
-  //   component: './TableList',
-  // },
-  {
-    name: 'form',
-    icon: 'zhihu',
-    path: '/form',
-    component: './QueryClientInfo',
-  },
   {
     name: 'form.basic-form',
     icon: 'solution',
@@ -75,6 +83,29 @@ export default [
     icon: 'orderedList',
     path: '/DyeingInfo',
     component: './DyeingInfo',
+  },
+  {
+    name: 'account',
+    icon: 'user',
+    path: '/account',
+    routes: [
+      {
+        path: '/account',
+        redirect: '/account/center',
+      },
+      // {
+      //   name: 'center',
+      //   icon: 'smile',
+      //   path: '/account/center',
+      //   component: './account/center',
+      // },
+      {
+        name: 'settings',
+        icon: 'smile',
+        path: '/account/settings',
+        component: './account/settings',
+      },
+    ],
   },
   {
     path: '/',
