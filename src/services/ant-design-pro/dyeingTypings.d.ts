@@ -22,6 +22,7 @@ declare namespace DYEING {
     name?: string;
     avatar?: string;
     password?: string;
+    confirm?: string;
     autoLogin?: boolean;
     type?: string;
     phone?: string;

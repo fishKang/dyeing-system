@@ -381,3 +381,28 @@ export async function userRegister(user:DYEING.User) {
     },
   });
 }
+
+export async function updateUserDetail(user:DYEING.User) {
+  return request<DYEING.Response>('/api/user/updateUserDetail', {
+    method: 'POST',
+    data: {
+      "channel": {
+        "serialnum": nanoid(),
+        "zoneno": "200",
+        "user": user?.name,
+        "service": "IDmsServiceARS",
+        "method": "addUserDetail",
+        "department": "开发",
+        "workdate": getNowDate(),
+        "worktime": new Date().toTimeString().substring(0, 8)
+      },
+     "data": {
+        "name": user.name,
+        "password": user.password,
+        "phone": user.phone,
+        "email": user.email,
+        "address": user.address,
+      }
+    },
+  });
+}
