@@ -47,7 +47,7 @@ const defaultData: DataSourceType[] = [
   },
 ];
 
-export default () => {
+const EditableTable1: React.FC = () => {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>([]);
   const [dataSource, setDataSource] = useState<readonly DataSourceType[]>([]);
   const [position, setPosition] = useState<'top' | 'bottom' | 'hidden'>(
@@ -69,58 +69,19 @@ export default () => {
       editable: (text, record, index) => {
         return index !== 0;
       },
-      width: '15%',
+      // width: '15%',
     },
     {
       title: '活动名称二',
       dataIndex: 'readonly',
       tooltip: '只读，使用form.getFieldValue可以获取到值',
-      readonly: true,
+      // readonly: true,
       width: '15%',
-    },
-    {
-      title: '状态',
-      key: 'state',
-      dataIndex: 'state',
-      valueType: 'select',
-      valueEnum: {
-        all: { text: '全部', status: 'Default' },
-        open: {
-          text: '未解决',
-          status: 'Error',
-        },
-        closed: {
-          text: '已解决',
-          status: 'Success',
-        },
-      },
-    },
-    {
-      title: '描述',
-      dataIndex: 'decs',
-      fieldProps: (form, { rowKey, rowIndex }) => {
-        if (form.getFieldValue([rowKey || '', 'title']) === '不好玩') {
-          return {
-            disabled: true,
-          };
-        }
-        if (rowIndex > 9) {
-          return {
-            disabled: true,
-          };
-        }
-        return {};
-      },
-    },
-    {
-      title: '活动时间',
-      dataIndex: 'created_at',
-      valueType: 'date',
     },
     {
       title: '操作',
       valueType: 'option',
-      width: 200,
+      // width: 200,
       render: (text, record, _, action) => [
         <a
           key="editable"
@@ -146,41 +107,41 @@ export default () => {
     <>
       <EditableProTable<DataSourceType>
         rowKey="id"
-        headerTitle="可编辑表格"
+        // headerTitle="可编辑表格"
         maxLength={5}
-        scroll={{
-          x: 960,
-        }}
-        recordCreatorProps={
-          position !== 'hidden'
-            ? {
-                position: position as 'top',
-                record: () => ({ id: (Math.random() * 1000000).toFixed(0) }),
-              }
-            : false
-        }
+        // scroll={{
+        //   x: 960,
+        // }}
+        // recordCreatorProps={
+        //   position !== 'hidden'
+        //     ? {
+        //         position: position as 'top',
+        //         record: () => ({ id: (Math.random() * 1000000).toFixed(0) }),
+        //       }
+        //     : false
+        // }
         loading={false}
         toolBarRender={() => [
           <ProFormRadio.Group
             key="render"
             fieldProps={{
-              value: position,
+              value: "bottom",
               onChange: (e) => setPosition(e.target.value),
             }}
-            options={[
-              {
-                label: '添加到顶部',
-                value: 'top',
-              },
-              {
-                label: '添加到底部',
-                value: 'bottom',
-              },
-              {
-                label: '隐藏',
-                value: 'hidden',
-              },
-            ]}
+            // options={[
+            //   {
+            //     label: '添加到顶部',
+            //     value: 'top',
+            //   },
+            //   {
+            //     label: '添加到底部',
+            //     value: 'bottom',
+            //   },
+            //   {
+            //     label: '隐藏',
+            //     value: 'hidden',
+            //   },
+            // ]}
           />,
         ]}
         columns={columns}
@@ -204,11 +165,11 @@ export default () => {
       <ProCard title="表格数据" headerBordered collapsible defaultCollapsed>
         <ProFormField
           ignoreFormItem
-          fieldProps={{
-            style: {
-              width: '100%',
-            },
-          }}
+          // fieldProps={{
+          //   style: {
+          //     width: '100%',
+          //   },
+          // }}
           mode="read"
           valueType="jsonCode"
           text={JSON.stringify(dataSource)}
@@ -217,3 +178,4 @@ export default () => {
     </>
   );
 };
+export default EditableTable1;

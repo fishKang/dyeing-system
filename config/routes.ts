@@ -49,40 +49,46 @@ export default [
     component: './Welcome',
     // hideInMenu:true,
   },
-  {
-    path: '/admin',
-    name: 'admin',
-    icon: 'crown',
-    access: 'canAdmin',
-    routes: [
-      {
-        path: '/admin',
-        redirect: '/admin/sub-page',
-      },
-      {
-        path: '/admin/sub-page',
-        name: 'sub-page',
-        component: './Admin',
-      },
-    ],
-  },
-  {
-    name: 'form.basic-form',
-    icon: 'solution',
-    path: '/ClientChartsInfo',
-    component: './ClientChartsInfo',
-  },
+  // {
+  //   path: '/queryClientInfo',
+  //   name: 'admin',
+  //   icon: 'crown',
+  //   access: 'canAdmin',
+  //   routes: [
+  //     {
+  //       path: '/queryClientInfo',
+  //       redirect: '/QueryClientInfo',
+  //     },
+  //     {
+  //       path: '/queryClientInfo/sub-page',
+  //       name: 'sub-page',
+  //       component: './QueryClientInfo',
+  //     },
+  //   ],
+  // },
+  // {
+  //   name: 'form.basic-form',
+  //   icon: 'solution',
+  //   path: '/ClientChartsInfo',
+  //   component: './ClientChartsInfo',
+  // },
   {
     name: 'form.customer.info',
     icon: 'solution',
-    path: '/ClientInfo',
+    path: '/clientInfo',
     component: './ClientInfo',
   },
   {
     name: 'form.dyeing.info',
     icon: 'orderedList',
-    path: '/DyeingInfo',
+    path: '/dyeingInfo',
     component: './DyeingInfo',
+  },
+  {
+    name: 'form.dyeing.yarn',
+    icon: 'LeftOutlined',
+    path: '/yarnDyeing',
+    component: './YarnDyeing',
   },
   {
     name: 'account',

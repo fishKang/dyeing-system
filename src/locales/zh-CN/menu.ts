@@ -51,4 +51,7 @@ export default {
   'menu.editor.koni': '拓扑编辑器',
   'menu.form.dyeing.info': '染料信息',
   'menu.form.customer.info': '客户信息',
+  'menu.form.dyeing.yarn': '纱染维护',
+  'menu.form.dyeing.sporadic': '散染维护',
+
 };
