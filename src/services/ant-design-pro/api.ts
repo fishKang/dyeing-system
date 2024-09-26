@@ -104,7 +104,7 @@ export async function userLogin(body: DYEING.User, options?: { [key: string]: an
     },
   });
 }
-function getNowDate() {
+export function getNowDate() {
   const date = new Date();
   let month: string | number = date.getMonth() + 1;
   let strDate: string | number = date.getDate();

@@ -101,8 +101,8 @@ const UpdateForm: React.FC<UpdateFormProps> = (props) => {
         <ProFormText
           name="company"
           label={intl.formatMessage({
-            id: 'pages.searchTable.company',
-            defaultMessage: '公司名称',
+            id: 'pages.yarnDyeing.input.customer',
+            defaultMessage: '客户名',
           })}
           width="md"
           rules={[

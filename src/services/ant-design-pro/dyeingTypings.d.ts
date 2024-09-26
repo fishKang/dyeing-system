@@ -94,4 +94,11 @@ declare namespace DYEING {
     /** 手机号 */
     phone?: string;
   };
+
+  type MaterialsDetail ={
+    id?: number;
+    dye_name?: string;
+    rate?: number;
+    amount?: number;
+  }
 }
